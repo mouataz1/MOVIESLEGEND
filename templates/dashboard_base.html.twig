@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>DarkPan - Bootstrap 5 Admin Template</title>
+    <title>{% block title %}{% endblock %}</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -55,7 +55,7 @@
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-secondary navbar-dark">
                 <a href="index.html" class="navbar-brand mx-4 mb-3">
-                    <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>DarkPan</h3>
+                    <h3 class="text-primary">MOVIESLEGENDS</h3>
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
@@ -68,7 +68,7 @@
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="index.html" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="index.html" class="nav-item nav-link {% if app.request.pathinfo == '/dashboard' %}active{% endif %}"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     {# <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
                         <div class="dropdown-menu bg-transparent border-0">
@@ -78,17 +78,17 @@
                         </div>
                     </div> #}
                     {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{path('app_category')}}" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Categories</a>
-                    <a href="form.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>SubCategories</a>
+                    <a href="{{path('app_category')}}" class="nav-item nav-link {% if app.request.pathinfo == '/category' %}active{% endif %}"><i class="fa fa-th me-2"></i>Categories</a>
+                    <a href="form.html" class="nav-item nav-link {% if app.request.pathinfo == '/subcategory' %}active{% endif %} "><i class="fa fa-keyboard me-2"></i>SubCategories</a>
                     {% endif %}
-                    <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Profile</a>
-                    <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Movies</a>
-                    <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Messages</a>
+                    <a href="table.html" class="nav-item nav-link {% if app.request.pathinfo == '/profile' %}active{% endif %}"><i class="fa fa-table me-2"></i>Profile</a>
+                    <a href="table.html" class="nav-item nav-link {% if app.request.pathinfo == '/movies' %}active{% endif %}"><i class="fa fa-table me-2"></i>Movies</a>
+                    <a href="table.html" class="nav-item nav-link {% if app.request.pathinfo == '/messages' %}active{% endif %}"><i class="fa fa-table me-2"></i>Messages</a>
 
                     {% if is_granted('ROLE_ADMIN') %}
-                    <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Users</a>
-                    <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Reports</a>
-                    <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Contact</a>
+                    <a href="chart.html" class="nav-item nav-link {% if app.request.pathinfo == '/users' %}active{% endif %}"><i class="fa fa-chart-bar me-2"></i>Users</a>
+                    <a href="chart.html" class="nav-item nav-link {% if app.request.pathinfo == '/reports' %}active{% endif %}"><i class="fa fa-chart-bar me-2"></i>Reports</a>
+                    <a href="chart.html" class="nav-item nav-link {% if app.request.pathinfo == '/contact' %}active{% endif %}"><i class="fa fa-chart-bar me-2"></i>Contact</a>
                     {% endif %}
 
                     {# <div class="nav-item dropdown">
