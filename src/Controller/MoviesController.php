@@ -15,12 +15,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class MoviesController extends AbstractController
 {
     /**
-     * @Route("/movies", name="app_movies")
+     * @Route("/dashboard/movies", name="app_dashboard_movies")
      */
     public function index(EntityManagerInterface $em): Response
     {
         $movies = $em->getRepository(Movie::class)->findBy(['user'=>$this->getUser()]);
-        return $this->render('movies/index.html.twig', [
+        return $this->render('dashboard/movies.html.twig', [
             'movies' => $movies,
         ]);
     }

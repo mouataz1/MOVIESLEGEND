@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Flasher\Prime\FlasherInterface;
 
 class CategoryController extends AbstractController
 {
@@ -17,60 +18,64 @@ class CategoryController extends AbstractController
     public function index(EntityManagerInterface $em): Response
     {
         $categories = $em->getRepository(Category::class)->findAll();
-        return $this->render('category/index.html.twig', [
+        return $this->render('dashboard/categories.html.twig', [
             'categories' => $categories,
         ]);
     }
 
     /**
-     * @Route("/category/add", name="app_add_category", methods="POST")
+     * @Route("/category/new", name="ap_add_category", methods="POST")
      */
-    public function addCategory(EntityManagerInterface $em, Request $request):Response
+    public function addCategory(EntityManagerInterface $em, Request $request, FlasherInterface $flasher):Response
     {
+        //dd($request);
         try{
             $category = new Category();
             $category->setTitle($request->get('title'));
             $em->persist($category);
             $em->flush();
-            $this->addFlash('success', 'Category AddedSuccessfully');
+           // $this->addFlash('success', 'Category Added Successfully');
+           $flasher->addSuccess('Category added Successfully 😎');
             return $this->redirectToRoute('app_category');
         }catch(\Exception $e){
-            $this->addFlash('error', 'An error occured Please try again !');
+            //$this->addFlash('error', 'An error occured Please try again !');
+            $flasher->addSuccess('An error occured Please try again ! 😕');
             return $this->redirectToRoute('app_category');
         }
     }
 
     /**
-     * @Route("/category/update", name="app_update_category", methods="POST")
+     * @Route("/category/edit", name="ap_edit_category", methods="POST")
      */
-    public function updateCategory(EntityManagerInterface $em, Request $request):Response
+    public function updateCategory(EntityManagerInterface $em, Request $request, FlasherInterface $flasher):Response
     {
         try{
-            $category = $em->getRepository(Category::class)->find($request->get('category'));
+            $category = $em->getRepository(Category::class)->find($request->get('catid'));
             $category->setTitle($request->get('title'));
             $em->persist($category);
             $em->flush();
-            $this->addFlash('success', 'Category updated Successfully');
+            $flasher->addSuccess('Category updated Successfully 😎');
             return $this->redirectToRoute('app_category');
         }catch(\Exception $e){
-            $this->addFlash('error', 'An error occured Please try again !');
+            $flasher->addSuccess('An error occured Please try again ! 😕');
             return $this->redirectToRoute('app_category');
         }
     }
 
      /**
-     * @Route("/category/remove", name="app_remove_category", methods="POST")
+     * @Route("/category/delete/{id}", name="ap_delete_category")
      */
-    public function removeCategory(EntityManagerInterface $em, Request $request):Response
+    public function removeCategory(EntityManagerInterface $em, Request $request, $id, FlasherInterface $flasher):Response
     {
+        //dd($request);
         try{
-            $category = $em->getRepository(Category::class)->find($request->get('category'));
+            $category = $em->getRepository(Category::class)->find($id);
             $em->remove($category);
             $em->flush();
-            $this->addFlash('success', 'Category updated Successfully');
+            $flasher->addSuccess('Category removed Successfully 😎');
             return $this->redirectToRoute('app_category');
         }catch(\Exception $e){
-            $this->addFlash('error', 'An error occured Please try again !');
+            $flasher->addSuccess('An error occured Please try again ! 😕');
             return $this->redirectToRoute('app_category');
         }
     }
