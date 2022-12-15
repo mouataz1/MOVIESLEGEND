@@ -97,4 +97,16 @@ class MoviesController extends AbstractController
             return $this->redirectToRoute('app_dashboard_movies');
         }
     }
+
+    /**
+     * @Route("/movie/{id}", name="app_movie_details")
+     */
+    public function movieDetails(Request $request, EntityManagerInterface $em, $id):Response
+    {
+        $movie = $em->getRepository(Movie::class)->find($id);
+        return $this->render('dashboard/movieDetails.html.twig', [
+            'movie' => $movie
+        ]);
+
+    }
 }
