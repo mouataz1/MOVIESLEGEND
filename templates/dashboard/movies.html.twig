@@ -1,29 +1,251 @@
 {% extends "dashboard_base.html.twig" %}
-{% block title %}
-    Movies
-{% endblock %}
+{% block title %}Movies{% endblock %}
 {% block css %}
-    
+    <style>
+        .checked {
+  color: orange;
+}
+    </style>
 {% endblock %}
 {% block body %}
-<div class="container-fluid pt-4 px-4">
-                <div class="row g-4">
-                    <div class="col-sm-6 col-xl-3">
-                    <img src="{{asset('frontend/img/anime/details-pic.jpg')}}" alt="">
-                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
-                            {# <i class="fa fa-chart-line fa-3x text-primary"></i> #}
-                            
-                            <div class="ms-3">
-                                <p class="mb-2">Today Sale</p>
-                                <h6 class="mb-0">$1234</h6>
-                            </div>
-                        </div>
-                    </div>
-                    
+<!-- Button trigger modal -->
+
+
+{% for message in app.flashes('success') %}
+            {# <div class="alert alert-success">
+                {{ message }}
+            </div> #}
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <img src="..." class="rounded mr-2" alt="...">
+                    <strong class="mr-auto">Helas</strong>
+                    <small class="text-muted">Now</small>
+                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="toast-body">
+                    {{message}}
                 </div>
             </div>
-    
+{% endfor %}
+{% for message in app.flashes('error') %}
+            {# <div class="alert alert-success">
+                {{ message }}
+            </div> #}
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <img src="..." class="rounded mr-2" alt="...">
+                    <strong class="mr-auto">Helas</strong>
+                    <small class="text-muted">Now</small>
+                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="toast-body">
+                    {{message}}
+                </div>
+            </div>
+{% endfor %}
+
+
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-secondary rounded-top p-4">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 text-center text-sm-start">
+                           <h2>List Of All Movies</h2>
+                        </div>
+                        <div class="col-12 col-sm-6 text-center text-sm-end">
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">New Movie</button>
+                            <!-- Modal -->
+                            <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content bg-secondary">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Add new Movie</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{{path('app_add_movie')}}" method="POST" enctype="multipart/form-data">
+                                            <div class="mb-3">
+                                                <label for="exampleInputEmail1" class="form-label">Title</label>
+                                                <input type="text" name="title" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="exampleInputPassword1" class="form-label">Duration</label>
+                                                <input type="number" name="duration" class="form-control" id="exampleInputPassword1">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="exampleInputPassword1" class="form-label">Link</label>
+                                                <input type="text" name="link" class="form-control" id="exampleInputPassword1">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="exampleInputPassword1" class="form-label">Date Of release</label>
+                                                <input type="date" name="releasedAt" class="form-control" id="exampleInputPassword1">
+                                            </div>
+                                            <div class="mb-3">
+                                            <label for="exampleInputEmail1" class="form-label">Description</label>
+                                                <textarea name="description" id="" cols="30" rows="10" class="form-control"></textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="exampleInputPassword1" class="form-label">Category</label>
+                                                <select name="category" id="" class="form-control">
+                                                {% for c in categories %}
+                                                    <option value="{{c.id}}">{{c.title}}</option>
+                                                {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                            <label for="exampleInputPassword1" class="form-label">Image</label>
+                                            <input type="file" name="image" class="form-control">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Add Movie</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+                        </div>
+                    </div>
+                </div>
+                {# cards #}
+                <div class="movies card-deck row d-flex justify-content-start container-fluid pt-4 px-4">
+                {% for m in movies %}
+                    <div class="card bg-secondary col-lg-3 col-md-3 col-sm-6 m-3">
+                        <img class="card-img-top" src="{{asset('images/')}}{{m.image}}" style="height: 348px;" alt="Card image cap">
+                        <div class="card-body">
+                        <h5 class="card-title">{{m.title}}</h5>
+                        <p class="card-text"><small class="text-muted">{{m.releasedAt|date("d-m-Y")}}</small></p>
+                        {# <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> #}
+                        <div class="rating pt-2">
+                            <h5>Rating</h5>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                        </div>
+                        </div>
+                        <div class="card-footer">
+                        <div class="btn-group btn-group-lg pt-2" role="group" aria-label="...">
+                            <button class="btn btn-success">Details</button>
+                            <button class="btn btn-warning"
+                            id="btn-edit"
+                             data-bs-toggle="modal"
+                              data-bs-target="#exampleModalEdit"
+                              data-id="{{m.id}}"
+                              data-title="{{m.title}}"
+                              data-duration="{{m.duration}}"
+                              data-link="{{m.link}}"
+                              data-date="{{m.releasedAt|date("Y-m-d")}}"
+                              data-description="{{m.description}}"
+                              data-category="{{m.category.title}}"
+                              data-image="{{m.image}}"
+                              >Edit</button>
+                            <button class="btn btn-danger" id="deleteMovie" data-id="{{m.id}}">Delete</button>
+                        </div></div>
+                        
+                    </div>
+                {% endfor %}
+                <div class="modal fade " id="exampleModalEdit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content bg-secondary">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Update Movie</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{{path('app_update_movie')}}" method="POST" enctype="multipart/form-data">
+                                        <input type="hidden" name="movie" id="movie-id">
+                                            <div class="mb-3">
+                                                <label for="title" class="form-label">Title</label>
+                                                <input type="text" name="title" class="form-control" id="title" aria-describedby="emailHelp" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="duration" class="form-label">Duration</label>
+                                                <input type="number" name="duration" class="form-control" id="duration" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="link" class="form-label">Link</label>
+                                                <input type="text" name="link" class="form-control" id="link" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="date" class="form-label">Date Of release</label>
+                                                <input type="date" name="releasedAt" class="form-control" id="date" required>
+                                            </div>
+                                            <div class="mb-3">
+                                            <label for="description" class="form-label">Description</label>
+                                                <textarea name="description" id="description" cols="30" rows="10" class="form-control" required></textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="exampleInputPassword1" class="form-label">Category</label>
+                                                <select name="category" id="category" class="form-control" required>
+                                                {% for c in categories %}
+                                                    <option value="{{c.id}}">{{c.title}}</option>
+                                                {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                            <label for="exampleInputPassword1" class="form-label">Image</label>
+                                            <input type="file" name="image" class="form-control">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Add Movie</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    
+                                    </div>
+                                </div>
+                            </div>
+                    
+                    
+                </div>
+                {# /cards #}
+
+            </div>
+
+
+
 {% endblock %}
 {% block js %}
-    
+<script>
+    $(document).ready(function(){
+        $("body").on("click", "#btn-edit", function(){
+            $("#movie-id").val($(this).attr("data-id"));
+            $("#title").val($(this).attr("data-title"));
+            $("#duration").val($(this).attr("data-duration"));
+            $("#link").val($(this).attr("data-link"));
+            $("#date").val($(this).attr("data-date"));
+            $("#description").val($(this).attr("data-description"));
+            $("#category").val($(this).attr("data-category"));
+            
+        })
+
+        $("body").on("click", "#deleteMovie", function(){
+            let id = $(this).attr("data-id");
+            Swal.fire({
+                title: 'Do you want to remove this Movie ?',
+                //showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Remove',
+                
+                }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    Swal.fire('Removed Successfully 😎!', '', 'success')
+                    window.location.href =`/movie/delete/${id}`;
+                }
+            })
+        })
+    })
+</script>
+
 {% endblock %}
