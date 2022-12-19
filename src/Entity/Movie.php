@@ -70,9 +70,15 @@ class Movie
      */
     private $comments;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Report::class, mappedBy="movie")
+     */
+    private $reports;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->reports = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -212,6 +218,36 @@ class Movie
             // set the owning side to null (unless already changed)
             if ($comment->getMovie() === $this) {
                 $comment->setMovie(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Report>
+     */
+    public function getReports(): Collection
+    {
+        return $this->reports;
+    }
+
+    public function addReport(Report $report): self
+    {
+        if (!$this->reports->contains($report)) {
+            $this->reports[] = $report;
+            $report->setMovie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(Report $report): self
+    {
+        if ($this->reports->removeElement($report)) {
+            // set the owning side to null (unless already changed)
+            if ($report->getMovie() === $this) {
+                $report->setMovie(null);
             }
         }
 
