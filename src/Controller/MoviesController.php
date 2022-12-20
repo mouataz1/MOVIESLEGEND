@@ -20,13 +20,15 @@ class MoviesController extends AbstractController
      */
     public function index(EntityManagerInterface $em): Response
     {
+        
         $movies = $em->getRepository(Movie::class)->findBy(['user'=>$this->getUser()]);
         $allmovies = $em->getRepository(Movie::class)->findAll();
         $categories = $em->getRepository(Category::class)->findAll();
         return $this->render('dashboard/movies.html.twig', [
             'movies' => $movies,
             'categories'=>$categories,
-            'allmovies'=>$allmovies
+            'allmovies'=>$allmovies,
+            
         ]);
     }
 
@@ -105,9 +107,12 @@ class MoviesController extends AbstractController
      */
     public function movieDetails(Request $request, EntityManagerInterface $em, $id):Response
     {
+        $movies = $em->getRepository(Movie::class)->findAll();
         $movie = $em->getRepository(Movie::class)->find($id);
         return $this->render('dashboard/movieDetails.html.twig', [
-            'movie' => $movie
+            'movie' => $movie,
+            'movies'=>$movies
+            
         ]);
 
     }
