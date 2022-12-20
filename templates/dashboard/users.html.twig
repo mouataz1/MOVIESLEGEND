@@ -1,0 +1,151 @@
+{% extends "dashboard_base.html.twig" %}
+{% block title %}Users{% endblock %}
+{% block css %}
+
+{% endblock %}
+{% block body %}
+<!-- Button trigger modal -->
+
+
+{% for message in app.flashes('success') %}
+            {# <div class="alert alert-success">
+                {{ message }}
+            </div> #}
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <img src="..." class="rounded mr-2" alt="...">
+                    <strong class="mr-auto">Helas</strong>
+                    <small class="text-muted">Now</small>
+                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="toast-body">
+                    {{message}}
+                </div>
+            </div>
+{% endfor %}
+{% for message in app.flashes('error') %}
+            {# <div class="alert alert-success">
+                {{ message }}
+            </div> #}
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <img src="..." class="rounded mr-2" alt="...">
+                    <strong class="mr-auto">Helas</strong>
+                    <small class="text-muted">Now</small>
+                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="toast-body">
+                    {{message}}
+                </div>
+            </div>
+{% endfor %}
+
+<div class="container-fluid pt-4 px-4">
+<div class="col-12 mt-5" >
+                        <div class="bg-secondary rounded h-100 p-4">
+                        <div class="row mb-3">
+                        <h6 class="mb-4 col">List Of All Registred Users</h6>
+                            <button class="btn btn-success  col-3 float-end" data-toggle="modal" data-target="#addCat"
+                            data-bs-toggle="modal" data-bs-target="#exampleModal"
+                            >New Category</button>
+                            <!-- Modal -->
+                            <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog ">
+                                    <div class="modal-content bg-secondary">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Add New Category</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body ">
+                                            <form action="/category/new" method="POST">
+                                                <div class="mb-3">
+                                                    <label for="exampleInputEmail1" class="form-label">Title</label>
+                                                    <input type="text" name="title" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                                    <div id="emailHelp" class="form-text">This will be displayed as the category title</div>
+                                                </div>
+                                                <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                            </form>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            
+                            <div class="table-responsive">
+                                <table class="table text-center" >
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">UserName</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">Role</th>
+                                            <th scope="col">Number Of Movies</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="rows">
+                                    {% for u in users %}
+                                        <tr>
+                                            <th scope="row">aaaa</th>
+                                            <td>aaaaa</td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+                                                    <button type="button" class="btn btn-danger" id="btn-delete" data-id="{{u.id}}">Delete</button>
+                                                    <label class="switch">
+                                            <input  name="checkbox" id="activateing" type="checkbox">
+                                                <span class="slider round"></span>
+                                            </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        
+</div>
+</div>
+
+
+{% endblock %}
+{% block js %}
+<script>
+    $(document).ready(function(){
+        $("body #rows").on("click", "#btn-edit", function(){
+            
+            $("#catid").val($(this).attr("data-id"));
+            $("#cattitle").val($(this).attr("data-title"));
+        })
+
+        $("body #rows").on("click", "#btn-delete", function(){
+            let id = $(this).attr("data-id");
+            Swal.fire({
+                title: 'Do you want to remove this category?',
+                //showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Remove',
+                
+                }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    Swal.fire('Removed Successfully 😎!', '', 'success')
+                    window.location.href =`/category/delete/${id}`;
+                }
+            })
+        })
+
+        
+    })
+</script>
+
+{% endblock %}
