@@ -116,43 +116,84 @@
                 </div>
                 {# cards #}
                 <div class="movies card-deck row d-flex justify-content-start container-fluid pt-4 px-4">
-                {% for m in movies %}
-                    <div class="card bg-secondary col-lg-3 col-md-3 col-sm-6 m-3">
-                        <img class="card-img-top" src="{{asset('images/')}}{{m.image}}" style="height: 348px;" alt="Card image cap">
-                        <div class="card-body">
-                        <h5 class="card-title">{{m.title}}</h5>
-                        <p class="card-text"><small class="text-muted">{{m.releasedAt|date("d-m-Y")}}</small></p>
-                        {# <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> #}
-                        <div class="rating pt-2">
-                            <h5>Rating</h5>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star"></span>
-                            <span class="fa fa-star"></span>
+                {% if is_granted('ROLE_ADMIN') %}
+                    {% for m in allmovies %}
+                        <div class="card bg-secondary col-lg-3 col-md-3 col-sm-6 m-3">
+                            <img class="card-img-top" src="{{asset('images/')}}{{m.image}}" style="height: 348px;" alt="Card image cap">
+                            <div class="card-body">
+                            <h5 class="card-title">{{m.title}}</h5>
+                            <p class="card-text"><small class="text-muted">{{m.releasedAt|date("d-m-Y")}}</small></p>
+                            {# <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> #}
+                            <div class="rating pt-2">
+                                <h5>Rating</h5>
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star"></span>
+                                <span class="fa fa-star"></span>
+                            </div>
+                            </div>
+                            <div class="card-footer">
+                            <div class="btn-group btn-group-lg pt-2" role="group" aria-label="...">
+                                <a href="/movie/{{m.id}}" class="btn btn-success">Details</a>
+                                <button class="btn btn-warning"
+                                id="btn-edit"
+                                data-bs-toggle="modal"
+                                data-bs-target="#exampleModalEdit"
+                                data-id="{{m.id}}"
+                                data-title="{{m.title}}"
+                                data-duration="{{m.duration}}"
+                                data-link="{{m.link}}"
+                                data-date="{{m.releasedAt|date("Y-m-d")}}"
+                                data-description="{{m.description}}"
+                                data-category="{{m.category.title}}"
+                                data-image="{{m.image}}"
+                                >Edit</button>
+                                <button class="btn btn-danger" id="deleteMovie" data-id="{{m.id}}">Delete</button>
+                            </div></div>
+                            
                         </div>
+                    {% endfor %}
+                {% else %}
+                    {% for m in movies %}
+                        <div class="card bg-secondary col-lg-3 col-md-3 col-sm-6 m-3">
+                            <img class="card-img-top" src="{{asset('images/')}}{{m.image}}" style="height: 348px;" alt="Card image cap">
+                            <div class="card-body">
+                            <h5 class="card-title">{{m.title}}</h5>
+                            <p class="card-text"><small class="text-muted">{{m.releasedAt|date("d-m-Y")}}</small></p>
+                            {# <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> #}
+                            <div class="rating pt-2">
+                                <h5>Rating</h5>
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star"></span>
+                                <span class="fa fa-star"></span>
+                            </div>
+                            </div>
+                            <div class="card-footer">
+                            <div class="btn-group btn-group-lg pt-2" role="group" aria-label="...">
+                                <a href="/movie/{{m.id}}" class="btn btn-success">Details</a>
+                                <button class="btn btn-warning"
+                                id="btn-edit"
+                                data-bs-toggle="modal"
+                                data-bs-target="#exampleModalEdit"
+                                data-id="{{m.id}}"
+                                data-title="{{m.title}}"
+                                data-duration="{{m.duration}}"
+                                data-link="{{m.link}}"
+                                data-date="{{m.releasedAt|date("Y-m-d")}}"
+                                data-description="{{m.description}}"
+                                data-category="{{m.category.title}}"
+                                data-image="{{m.image}}"
+                                >Edit</button>
+                                <button class="btn btn-danger" id="deleteMovie" data-id="{{m.id}}">Delete</button>
+                            </div></div>
+                            
                         </div>
-                        <div class="card-footer">
-                        <div class="btn-group btn-group-lg pt-2" role="group" aria-label="...">
-                            <a href="/movie/{{m.id}}" class="btn btn-success">Details</a>
-                            <button class="btn btn-warning"
-                            id="btn-edit"
-                             data-bs-toggle="modal"
-                              data-bs-target="#exampleModalEdit"
-                              data-id="{{m.id}}"
-                              data-title="{{m.title}}"
-                              data-duration="{{m.duration}}"
-                              data-link="{{m.link}}"
-                              data-date="{{m.releasedAt|date("Y-m-d")}}"
-                              data-description="{{m.description}}"
-                              data-category="{{m.category.title}}"
-                              data-image="{{m.image}}"
-                              >Edit</button>
-                            <button class="btn btn-danger" id="deleteMovie" data-id="{{m.id}}">Delete</button>
-                        </div></div>
-                        
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                {% endif %}
+                
                 <div class="modal fade " id="exampleModalEdit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content bg-secondary">

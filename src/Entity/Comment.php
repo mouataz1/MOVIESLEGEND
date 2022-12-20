@@ -44,6 +44,11 @@ class Comment
      */
     private $movie;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $commentedAt;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +110,18 @@ class Comment
     public function setMovie(?Movie $movie): self
     {
         $this->movie = $movie;
+
+        return $this;
+    }
+
+    public function getCommentedAt(): ?\DateTimeInterface
+    {
+        return $this->commentedAt;
+    }
+
+    public function setCommentedAt(?\DateTimeInterface $commentedAt): self
+    {
+        $this->commentedAt = $commentedAt;
 
         return $this;
     }

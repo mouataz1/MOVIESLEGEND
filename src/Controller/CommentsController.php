@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Entity\Movie;
 use App\Entity\User;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,20 +30,21 @@ class CommentsController extends AbstractController
     public function addComment(EntityManagerInterface $em, Request $request):Response
     {
         try{
-            $movie = $em->getRepository(Movie::class)->find($request->get('mivie'));
+            $movie = $em->getRepository(Movie::class)->find($request->get('movie'));
         $comment = new Comment();
         $comment->setBody($request->get('comment'))
                 ->setLikes(0)
                 ->setDislikes(0)
-                ->setUser($em->getReference(User::class, $request->get('user')))
+                ->setUser($em->getReference(User::class, $this->getUser()->getId()))
+                ->setCommentedAt(new DateTime())
                 ->setMovie($movie);
-        $em->persist($movie);
+        $em->persist($comment);
         $em->flush();
         $this->addFlash('success', 'Comment Added');
-        return $this->redirectToRoute('app_comments');
+        return $this->redirectToRoute('app_movie_details', ['id'=>$movie->getId()]);
         }catch(\Exception $e){
-            $this->addFlash('error', 'an error occured please try again');
-            return $this->redirectToRoute('app_comments');
+            $this->addFlash('error', $e->getMessage());
+            return $this->redirectToRoute('app_dashboard_movies');
         } 
     }
 
