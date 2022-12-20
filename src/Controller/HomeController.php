@@ -17,10 +17,24 @@ class HomeController extends AbstractController
     public function index(EntityManagerInterface $em): Response
     {
         $categories = $em->getRepository(Category::class)->findAll();
-       // $movies = $em->getRepository(Movie::class)->findAll();
+        $movies = $em->getRepository(Movie::class)->findAll();
+
+        //trending (6)
+
+        //popular(6)
+        //recentlt added(6)
+        //top views
+        //new comments
         
         return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
+            'movies' => $movies,
+            'categories'=>$categories
         ]);
     }
+
+    //by category
+            //top views
+            //new comment
+
+
 }
