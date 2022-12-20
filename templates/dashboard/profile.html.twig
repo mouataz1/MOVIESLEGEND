@@ -1,0 +1,179 @@
+{% extends "dashboard_base.html.twig" %}
+{% block title %}Profile{% endblock %}
+{% block css %}
+<style>
+    .form-control:focus {
+        box-shadow: none;
+        border-color: #BA68C8
+    }
+
+    .profile-button {
+        background: rgb(99, 39, 120);
+        box-shadow: none;
+        border: none
+    }
+
+    .profile-button:hover {
+        background: #682773
+    }
+
+    .profile-button:focus {
+        background: #682773;
+        box-shadow: none
+    }
+
+    .profile-button:active {
+        background: #682773;
+        box-shadow: none
+    }
+
+    .back:hover {
+        color: #682773;
+        cursor: pointer
+    }
+
+    .labels {
+        font-size: 11px
+    }
+
+    .add-experience:hover {
+        background: #BA68C8;
+        color: #fff;
+        cursor: pointer;
+        border: solid 1px #BA68C8
+    }
+</style>
+{% endblock %}
+{% block body %}
+<!-- Button trigger modal -->
+
+
+{% for message in app.flashes('success') %}
+{# <div class="alert alert-success">
+                {{ message }}
+            </div> #}
+<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+        <img src="..." class="rounded mr-2" alt="...">
+        <strong class="mr-auto">Helas</strong>
+        <small class="text-muted">Now</small>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="toast-body">
+        {{message}}
+    </div>
+</div>
+{% endfor %}
+{% for message in app.flashes('error') %}
+{# <div class="alert alert-success">
+                {{ message }}
+            </div> #}
+<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+        <img src="..." class="rounded mr-2" alt="...">
+        <strong class="mr-auto">Helas</strong>
+        <small class="text-muted">Now</small>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="toast-body">
+        {{message}}
+    </div>
+</div>
+{% endfor %}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="col-12 mt-5">
+        <div class="row">
+            <div class="col-md-3 border-right">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                    <img class="rounded-circle mt-5" width="150px"
+                        src="{{asset('images/')}}{{user.image}}">
+                    <span class="font-weight-bold">{{user.getName()}}</span>
+                    <span class="text-white-50">{{user.email}}</span>
+                    <span> </span>
+                </div>
+            </div>
+            <div class="col-md-5 border-right">
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Update General Info</h4>
+                    </div>
+                    <form action="{{path('app_profile_update_generale')}}" method="post">
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                <label class="labels">UserName</label>
+                                <input type="text" class="form-control" name="username" placeholder="UserName"
+                                    value="{{user.getName()}}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="labels">Email</label>
+                                <input type="email" class="form-control" name="email" value="{{user.email}}"
+                                    placeholder="Email">
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                <label class="labels">Gender</label>
+                                <select name="gender" id="" class="form-control">
+                                    <option value="male">Male</option>
+                                    <option value="female">Feale</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="labels">BirthDay</label>
+                                <input type="date" class="form-control" value="" placeholder="Email">
+                            </div>
+                        </div>
+                        <div class="mt-5 text-center">
+                            <button class="btn btn-primary profile-button" type="submit">Update General info</button>
+                        </div>
+
+                    </form>
+
+                    <form action="{{path('app_profile_update_password')}}" method="post" class="pt-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="text-right">Update Password</h4>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <label class="labels">Password</label>
+                                    <input type="text" name="new" name class="form-control" placeholder="New Password" value="">
+                                </div>
+                            <div class="col-md-12">
+                            <label class="labels">Confirm Password</label>
+                            <input type="text" name="confirm" class="form-control" placeholder="Confirm Password" value="">
+                            </div>
+                        </div>
+                        <div class="mt-5 text-center">
+                            <button class="btn btn-primary profile-button" type="submit">Update Password</button>
+                        </div>
+                    </form>
+
+
+                    <form action="{{path('app_profile_update_avatar')}}" method="post" class="pt-5" enctype="multipart/form-data">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Update image</h4>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12"><label class="labels">Image</label>
+                        <input type="file" name="image"
+                                class="form-control" placeholder="education" value=""></div>
+                    </div>
+
+                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="submit">update
+                            image</button>
+                    </div>
+                    </form>
+                    
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    {% endblock %}
