@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Movie;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,6 +18,11 @@ class UsersController extends AbstractController
     public function index(EntityManagerInterface $em): Response
     {
         $users = $em->getRepository(User::class)->findAll();
+       /*  $usermovies = [];
+        foreach($users as $u){
+            $usermovies = $em->getRepository(Movie::class)->findByUser($u);
+        } */
+        
         return $this->render('dashboard/users.html.twig', [
             'users' => $users,
         ]);

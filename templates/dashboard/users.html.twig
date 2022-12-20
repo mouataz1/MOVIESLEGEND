@@ -111,9 +111,7 @@
                         <div class="bg-secondary rounded h-100 p-4">
                         <div class="row mb-3">
                         <h6 class="mb-4 col">List Of All Registred Users</h6>
-                            <button class="btn btn-success  col-3 float-end" data-toggle="modal" data-target="#addCat"
-                            data-bs-toggle="modal" data-bs-target="#exampleModal"
-                            >New Category</button>
+                           
                             <!-- Modal -->
                             <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog ">
@@ -160,7 +158,7 @@
                                             <th scope="row">{{u.getName()}}</th>
                                             <td>{{u.email}}</td>
                                             <td>{{u.roles[0]}}</td>
-                                            <td>5</td>
+                                            <td>{{u.movies|length}}</td>
                                            
                                                <td class="text-center">
                                                     <label class="switch">
@@ -209,6 +207,7 @@
                                     confirmButtonText: 'ok ',
                                     showCancelButton:false
                                 })
+                                window.location.reload();
                             },
                             error: function(xhr, status, error){
                                 console.error(xhr);
@@ -236,6 +235,7 @@
                                     confirmButtonText: 'ok ',
                                     showCancelButton:false
                                 })
+                                window.location.reload();
                             },
                             error: function(xhr, status, error){
                                 console.error(xhr);

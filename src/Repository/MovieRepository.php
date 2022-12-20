@@ -54,13 +54,14 @@ class MovieRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Movie
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findByUser($user): ?Movie
+    {
+       return $this->createQueryBuilder('m')
+            ->andWhere('m.user = :val')
+            ->setParameter('val', $user)
+            ->getQuery()
+            //->getOneOrNullResult()
+            ->getSingleScalarResult()
+        ;
+    }
 }
