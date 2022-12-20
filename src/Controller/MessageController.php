@@ -13,12 +13,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class MessageController extends AbstractController
 {
     /**
-     * @Route("/message", name="app_message")
+     * @Route("/messages", name="app_message")
      */
     public function index(EntityManagerInterface $em): Response
     {
-        $messages = $em->getRepository(Message::class)->findBy(["user"=>$this->getUser()]);
-        return $this->render('message/index.html.twig', [
+        $messages = $em->getRepository(Message::class)->findBy(["receiver"=>$this->getUser()]);
+        return $this->render('dashboard/messages.html.twig', [
             'messages' => $messages,
         ]);
     }
@@ -35,6 +35,29 @@ class MessageController extends AbstractController
         $em->persist($message);
         $em->flush();
         $this->addFlash('success', 'message sent !');
+        return $this->redirectToRoute('app_message');
+    }
+
+    /**
+     * @Route("/message/remove/{id}", name="app_delete_message")
+     */
+    public function deleteMessage(EntityManagerInterface $em, Request $request, $id):Response
+    {
+        $message = $em->getRepository(Message::class)->find($id);
+        $em->remove($message);
+        $em->flush();
+        $this->addFlash('success', 'Message Removed Successfully');
+        return $this->redirectToRoute('app_message');
+    }
+
+    /**
+     * @Route("/conversation", name="app_convrsation")
+     */
+    public function conversation(EntityManagerInterface $em, Request $request):Response
+    {
+        $receiver = $this->getUser();
+        $sender = $request->get('sender');
+        
         return $this->redirectToRoute('app_message');
     }
 }

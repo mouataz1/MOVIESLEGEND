@@ -83,12 +83,12 @@
                     {% endif %}
                     <a href="table.html" class="nav-item nav-link {% if app.request.pathinfo == '/profile' %}active{% endif %}"><i class="fa fa-table me-2"></i>Profile</a>
                     <a href="{{path('app_dashboard_movies')}}" class="nav-item nav-link {% if app.request.pathinfo == '/dashboard/movies' %}active{% endif %}"><i class="fa fa-table me-2"></i>Movies</a>
-                    <a href="table.html" class="nav-item nav-link {% if app.request.pathinfo == '/messages' %}active{% endif %}"><i class="fa fa-table me-2"></i>Messages</a>
+                    <a href="{{path('app_message')}}" class="nav-item nav-link {% if app.request.pathinfo == '/messages' %}active{% endif %}"><i class="fa fa-table me-2"></i>Messages</a>
 
                     {% if is_granted('ROLE_ADMIN') %}
                     <a href="chart.html" class="nav-item nav-link {% if app.request.pathinfo == '/users' %}active{% endif %}"><i class="fa fa-chart-bar me-2"></i>Users</a>
-                    <a href="chart.html" class="nav-item nav-link {% if app.request.pathinfo == '/reports' %}active{% endif %}"><i class="fa fa-chart-bar me-2"></i>Reports</a>
-                    <a href="chart.html" class="nav-item nav-link {% if app.request.pathinfo == '/contact' %}active{% endif %}"><i class="fa fa-chart-bar me-2"></i>Contact</a>
+                    <a href="{{path('app_report')}}" class="nav-item nav-link {% if app.request.pathinfo == '/reports' %}active{% endif %}"><i class="fa fa-chart-bar me-2"></i>Reports</a>
+                    <a href="{{path('app_contact')}}" class="nav-item nav-link {% if app.request.pathinfo == '/contact' %}active{% endif %}"><i class="fa fa-chart-bar me-2"></i>Contact</a>
                     {% endif %}
 
                     {# <div class="nav-item dropdown">

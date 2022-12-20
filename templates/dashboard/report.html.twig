@@ -1,5 +1,5 @@
 {% extends "dashboard_base.html.twig" %}
-{% block title %}Messages{% endblock %}
+{% block title %}REPORTS{% endblock %}
 {% block css %}
 
 {% endblock %}
@@ -48,7 +48,7 @@
 <div class="col-12 mt-5" >
                         <div class="bg-secondary rounded h-100 p-4">
                         <div class="row mb-3">
-                        <h6 class="mb-4 col">List Of All Messages Requests</h6>
+                        <h6 class="mb-4 col">List Of All Reports</h6>
                             
                         </div>
                             
@@ -57,25 +57,18 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">#</th>
-                                            <th scope="col">UserName</th>
+                                            <th scope="col">Movie</th>
+                                            <th scope="col">User</th>
                                             <th scope="col"> Content</th>
-                                            <th scope="col"> Actions</th>
-                                            
                                         </tr>
                                     </thead>
                                     <tbody id="rows">
-                                    {% for m in messages %}
+                                    {% for r in reports %}
                                         <tr>
-                                            <th scope="row">{{m.id}}</th>
-                                            <td>{{m.sender.username}}</td>
-                                            <td>{{m.content}}</td>
-                                            <td>
-                                            <div class="btn-group" role="group">
-                                                    <button type="button" class="btn btn-success" >Details</button>
-                                                    <button type="button" class="btn btn-danger" data-id="{{m.id}}" id="btn-delete">Delete</button>
-                                                </div>
-                                            </td>
-                                            
+                                            <th scope="row">{{r.id}}</th>
+                                            <td>{{r.movie.title}}</td>
+                                            <td>{{r.user.username}}</td>
+                                            <td>{{r.content}}</td>
                                             
                                         </tr>
                                     {% endfor %}
@@ -84,35 +77,34 @@
                             </div>
                         </div>
 
-                        
+                        <!-- Modal -->
+                            <div class="modal fade " id="editmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog ">
+                                    <div class="modal-content bg-secondary">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Update Category</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body ">
+                                            <form action="/category/edit" method="POST">
+                                            <input type="hidden" name="catid" id="catid">
+                                                <div class="mb-3">
+                                                    <label for="exampleInputEmail1" class="form-label">Title</label>
+                                                    <input type="text" name="title" class="form-control" id="cattitle" aria-describedby="emailHelp">
+                                                    <div id="emailHelp" class="form-text">This will be displayed as the category title</div>
+                                                </div>
+                                                <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                            </form>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+</div>
 </div>
 
-
-{% endblock %}
-{% block js %}
-<script>
-    $(document).ready(function(){
-       
-
-        $("body #rows").on("click", "#btn-delete", function(){
-            let id = $(this).attr("data-id");
-            Swal.fire({
-                title: 'Do you want to remove this Message?',
-                //showDenyButton: true,
-                showCancelButton: true,
-                confirmButtonText: 'Remove',
-                
-                }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
-                if (result.isConfirmed) {
-                    Swal.fire('Removed Successfully 😎!', '', 'success')
-                    window.location.href =`/message/remove/${id}`;
-                }
-            })
-        })
-
-        
-    })
-</script>
 
 {% endblock %}

@@ -13,12 +13,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class ReportController extends AbstractController
 {
     /**
-     * @Route("/report", name="app_report")
+     * @Route("/reports", name="app_report")
      */
     public function index(EntityManagerInterface $em): Response
     {
         $reports = $em->getRepository(Report::class)->findAll();
-        return $this->render('report/index.html.twig', [
+        return $this->render('dashboard/report.html.twig', [
             'reports' => $reports,
         ]);
     }
