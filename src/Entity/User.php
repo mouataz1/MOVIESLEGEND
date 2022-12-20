@@ -84,6 +84,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $image;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isEnabled = 1;
+
     public function __construct()
     {
         $this->movies = new ArrayCollection();
@@ -360,6 +365,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setImage(?string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function isIsEnabled(): ?bool
+    {
+        return $this->isEnabled;
+    }
+
+    public function setIsEnabled(bool $isEnabled): self
+    {
+        $this->isEnabled = $isEnabled;
 
         return $this;
     }

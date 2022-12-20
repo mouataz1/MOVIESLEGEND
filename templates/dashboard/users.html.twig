@@ -1,9 +1,71 @@
 {% extends "dashboard_base.html.twig" %}
 {% block title %}Users{% endblock %}
 {% block css %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+    <style>
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
 
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+    </style>
 {% endblock %}
 {% block body %}
+
 <!-- Button trigger modal -->
 
 
@@ -88,23 +150,28 @@
                                             <th scope="col">Email</th>
                                             <th scope="col">Role</th>
                                             <th scope="col">Number Of Movies</th>
-                                            <th scope="col">Actions</th>
+                                            <th scope="col">Enable / Disable</th>
                                         </tr>
                                     </thead>
                                     <tbody id="rows">
                                     {% for u in users %}
                                         <tr>
-                                            <th scope="row">aaaa</th>
-                                            <td>aaaaa</td>
-                                            <td>
-                                                <div class="btn-group" role="group">
-                                                    <button type="button" class="btn btn-danger" id="btn-delete" data-id="{{u.id}}">Delete</button>
+                                            <th scope="row">{{u.id}}</th>
+                                            <th scope="row">{{u.getName()}}</th>
+                                            <td>{{u.email}}</td>
+                                            <td>{{u.roles[0]}}</td>
+                                            <td>5</td>
+                                           
+                                               <td class="text-center">
                                                     <label class="switch">
-                                            <input  name="checkbox" id="activateing" type="checkbox">
-                                                <span class="slider round"></span>
-                                            </label>
-                                                </div>
-                                            </td>
+                                                        <input {{ u.isEnabled ? 'checked' : "null"}} data-id="{{ u.id }}" name="checkbox" id="activateing" type="checkbox">
+                                                        <span class="slider round"></span>
+                                                    </label>
+
+                                                </td>
+                                            
+                                            
+                                            
                                         </tr>
                                     {% endfor %}
                                     </tbody>
@@ -121,30 +188,63 @@
 {% block js %}
 <script>
     $(document).ready(function(){
-        $("body #rows").on("click", "#btn-edit", function(){
-            
-            $("#catid").val($(this).attr("data-id"));
-            $("#cattitle").val($(this).attr("data-title"));
-        })
+         $("body #rows").on("change", "#activateing", function() {
+                    if ($(this).is(':checked')) {
+                        let juge = $(this).attr("data-id");
+                        //window.location.href = '/admin/activate/juge/'+juge;
+                        $.ajax({
+                            type: "POST",
+                            url: '/user/enable',
+                            data: {
+                                userid: juge
+                            },
+                            success: function(data){
+                                Swal.fire({
+                                    title: 'account enabled',
 
-        $("body #rows").on("click", "#btn-delete", function(){
-            let id = $(this).attr("data-id");
-            Swal.fire({
-                title: 'Do you want to remove this category?',
-                //showDenyButton: true,
-                showCancelButton: true,
-                confirmButtonText: 'Remove',
-                
-                }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
-                if (result.isConfirmed) {
-                    Swal.fire('Removed Successfully 😎!', '', 'success')
-                    window.location.href =`/category/delete/${id}`;
-                }
-            })
-        })
+                                    icon: 'success',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'ok ',
+                                    showCancelButton:false
+                                })
+                            },
+                            error: function(xhr, status, error){
+                                console.error(xhr);
+                            }
+                        });
 
-        
+
+                    } else if ($(this).not(':checked')) {
+                        let juge = $(this).attr("data-id");
+                        //window.location.href = '/admin/activate/juge/'+juge;
+                        $.ajax({
+                            type: "POST",
+                            url: '/user/disable',
+                            data: {
+                                userid: juge
+                            },
+                            success: function(data){
+                                Swal.fire({
+                                    title: 'Account Disables',
+
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'ok ',
+                                    showCancelButton:false
+                                })
+                            },
+                            error: function(xhr, status, error){
+                                console.error(xhr);
+                            }
+                        });
+                    }
+
+
+                });
     })
 </script>
 
