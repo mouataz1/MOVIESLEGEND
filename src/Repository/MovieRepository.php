@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Movie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -51,8 +52,29 @@ class MovieRepository extends ServiceEntityRepository
 //            ->setMaxResults(10)
 //            ->getQuery()
 //            ->getResult()
+
 //        ;
 //    }
+
+   public function getTrending()
+   {
+    return $this->createQueryBuilder('m')
+        ->orderBy('m.id', 'DESC')
+        ->setMaxResults(6)
+        ->getQuery()
+        ->getResult()
+    ;
+   }
+
+   public function random()
+   {
+        return $this->createQueryBuilder('m')
+            //->orderBy('RAND()')
+            ->setMaxResults(6)
+            ->getQuery()
+            ->getResult()
+        ;
+   }
 
     public function findByUser($user): ?Movie
     {
